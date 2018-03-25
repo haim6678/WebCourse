@@ -1,16 +1,16 @@
-export const calculateNextState = (prevState, currentInput) => {
+function calculateNext(prevState, currentInput) {
 	return getNextDisplay(prevState, currentInput);
-};
+}
 
-const checkIfOperation = (str) => {
+function checkIfOperation(str) {
 	return /^[+-/*^]$/.test(str);
 };
 
-const getNextDisplay = (prevState, currentInput) => {
+function getNextDisplay(prevState, currentInput) {
 	//if it's the first input to the program
 	if (prevState === null) {
 		return {
-			state: currentInput,
+			calculatorState: currentInput,
 			display: checkIfOperation(currentInput) ? '' : currentInput,
 			lastInput: currentInput
 		};
@@ -20,7 +20,7 @@ const getNextDisplay = (prevState, currentInput) => {
 	if (!isNaN(currentInput)) {
 		//if the prev was also a number
 		return {
-			state: prevState.lastInput === '=' ? currentInput : prevState.state + currentInput,
+			calculatorState: prevState.lastInput === '=' ? currentInput : prevState.state + currentInput,
 			display: (checkIfOperation(prevState.lastInput) || prevState.lastInput === '=') ? currentInput : prevState.display + currentInput,
 			lastInput: currentInput
 		};
@@ -29,7 +29,7 @@ const getNextDisplay = (prevState, currentInput) => {
 	//check if the input is operation
 	else if (checkIfOperation(currentInput)) {
 		return {
-			state: checkIfOperation(prevState.lastInput) ? prevState.state.substring(0, prevState.state.length - 1) + currentInput : prevState.state + currentInput,
+			calculatorState: checkIfOperation(prevState.lastInput) ? prevState.state.substring(0, prevState.state.length - 1) + currentInput : prevState.state + currentInput,
 			display: prevState.display,
 			lastInput: currentInput
 		};
@@ -37,14 +37,14 @@ const getNextDisplay = (prevState, currentInput) => {
 
 	else if (currentInput === '=') {
 		let result = calcResult(prevState);
-		return {state: result.toString(), display: result.toString(), lastInput: '='};
+		return {calculatorState: result.toString(), display: result.toString(), lastInput: '='};
 	}
 	//fixme handle different input (wrong inputs)
 };
 
 //calculate the arithmetic result
-const calcResult = (prevState) => {
-	const array = prevState.state.split('');
+function calcResult(prevState) {
+	const array = prevState.calculatorState.split('');
 	let lastNum = 0;
 	let lastStrNum = '';
 	let lastOperation = '';
@@ -65,7 +65,7 @@ const calcResult = (prevState) => {
 };
 
 //perform the requested operator
-const calcOperation = (operation, firstNum, secNum) => {
+function calcOperation(operation, firstNum, secNum) {
 	switch (operation) {
 		case '+':
 			return firstNum + secNum;
@@ -85,3 +85,5 @@ const calcOperation = (operation, firstNum, secNum) => {
 	}
 	return firstNum;
 };
+
+module.exports.calculateNextState = calculateNext;
