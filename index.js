@@ -11,11 +11,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // Set our api routes - for MVC
 app.post('/calculate', (req, res) => {
+    res.json(calculate.calculateNextState(req.body.calculatorState, req.body.input));
 });
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
-	res.json(calculate.calculateNextState(null,'1'));
+    // res.json(calculate.calculateNextState(null,'1'));
 });
 
 // Get port from environment and store in Express.

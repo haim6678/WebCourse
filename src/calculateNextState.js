@@ -1,89 +1,92 @@
 function calculateNext(prevState, currentInput) {
-	return getNextDisplay(prevState, currentInput);
+    return getNextDisplay(prevState, currentInput);
 }
 
-function checkIfOperation(str) {
-	return /^[+-/*^]$/.test(str);
-};
+function isEquals(str) {
+    return str === '=';
+}
 
-function getNextDisplay(prevState, currentInput) {
-	//if it's the first input to the program
-	if (prevState === null) {
-		return {
-			calculatorState: currentInput,
-			display: checkIfOperation(currentInput) ? '' : currentInput,
-			lastInput: currentInput
-		};
-	}
+function isOperator(str) {
+    return /^[+-/*^]$/.test(str);
+}
 
-	//check if the input it's a number
-	if (!isNaN(currentInput)) {
-		//if the prev was also a number
-		return {
-			calculatorState: prevState.lastInput === '=' ? currentInput : prevState.state + currentInput,
-			display: (checkIfOperation(prevState.lastInput) || prevState.lastInput === '=') ? currentInput : prevState.display + currentInput,
-			lastInput: currentInput
-		};
-	}
+function isNumber(str) {
+    return !isNaN(str);
+}
 
-	//check if the input is operation
-	else if (checkIfOperation(currentInput)) {
-		return {
-			calculatorState: checkIfOperation(prevState.lastInput) ? prevState.state.substring(0, prevState.state.length - 1) + currentInput : prevState.state + currentInput,
-			display: prevState.display,
-			lastInput: currentInput
-		};
-	}
+function getNextDisplay(calculatorState, currentInput) {
+    let newCalculatorState = {};
+    let display = null;
 
-	else if (currentInput === '=') {
-		let result = calcResult(prevState);
-		return {calculatorState: result.toString(), display: result.toString(), lastInput: '='};
-	}
-	//fixme handle different input (wrong inputs)
-};
+    //if it's the first input to the program
+    if (calculatorState === null) {
+        // If the first input is a number
+        if (isNumber(currentInput)) {
+            newCalculatorState = {lastNumber: 0, currNumber: currentInput, operator: null};
+            display = currentInput;
+        } else if (isOperator(currentInput)) {
+            newCalculatorState = {lastNumber: 0, currNumber: 0, operator: currentInput};
+            display = '';
+        } else if (isEquals(currentInput)) {
+            newCalculatorState = {lastNumber: 0, currNumber: 0, operator: null};
+            display = '';
+        }
+    }
 
-//calculate the arithmetic result
-function calcResult(prevState) {
-	const array = prevState.calculatorState.split('');
-	let lastNum = 0;
-	let lastStrNum = '';
-	let lastOperation = '';
+    //check if the input is a number
+    else {
+        const lastNumber = calculatorState.lastNumber;
+        const currNumber = calculatorState.currNumber;
+        const operator = calculatorState.operator;
 
-	array.forEach((character, index) => {
-		if (checkIfOperation(character) || index === array.length) {
-			let temp = lastStrNum === '' ? 0 : parseInt(lastStrNum);
-			lastStrNum = '';
-			lastNum = lastOperation !== '' ? calcOperation(lastOperation, lastNum, temp) : temp;
-			lastOperation = character;
-		} else {
-			lastStrNum += character;
-		}
-	});
+        if (isNumber(currentInput)) {
+            newCalculatorState = {
+                lastNumber: isEquals(operator) ? 0 : lastNumber,
+                currNumber: isEquals(operator) ? currentInput : parseInt(currNumber) * 10 + parseInt(currentInput),
+                operator: operator
+            };
+            display = isEquals(operator) ? currentInput : parseInt(currNumber) * 10 + parseInt(currentInput);
+        }
 
-	lastNum = lastOperation !== '' ? calcOperation(lastOperation, lastNum, parseInt(lastStrNum)) : parseInt(lastStrNum);
-	return lastNum;
-};
+        //check if the input is operation
+        else if (isOperator(currentInput)) {
+            newCalculatorState = {lastNumber: lastNumber, currNumber: currNumber, operator: currentInput};
+            display = currNumber;
+        }
 
-//perform the requested operator
-function calcOperation(operation, firstNum, secNum) {
-	switch (operation) {
-		case '+':
-			return firstNum + secNum;
-			break;
-		case '-':
-			return firstNum - secNum;
-			break;
-		case '*':
-			return firstNum * secNum;
-			break;
-		case '/':
-			return firstNum / secNum;
-			break;
-		case '^':
-			return Math.pow(firstNum, secNum);
-			break;
-	}
-	return firstNum;
-};
+        else if (isEquals(currentInput)) {
+            const result = calculate(calculatorState);
+            newCalculatorState = {lastNumber: result, currNumber: 0, operator: currentInput};
+            display = result;
+        }
+    }
+
+    return {
+        calculatorState: newCalculatorState,
+        display: display
+    }
+    //fixme handle different input (wrong inputs)
+}
+
+function calculate(calculatorState) {
+    const lastNumber = parseInt(calculatorState.lastNumber);
+    const currNumber = parseInt(calculatorState.currNumber);
+    const operator = calculatorState.operator;
+
+    switch (operator) {
+        case '+':
+            return lastNumber + currNumber;
+        case '-':
+            return lastNumber + currNumber;
+        case '*':
+            return lastNumber + currNumber;
+        case '/':
+            return lastNumber + currNumber;
+        case '^':
+            return Math.pow(lastNumber, currNumber);
+        default:
+            return null;
+    }
+}
 
 module.exports.calculateNextState = calculateNext;
