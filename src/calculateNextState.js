@@ -1,7 +1,3 @@
-function calculateNext(prevState, currentInput) {
-    return getNextDisplay(prevState, currentInput);
-}
-
 function isEquals(str) {
     return str === '=';
 }
@@ -14,7 +10,7 @@ function isNumber(str) {
     return !isNaN(str);
 }
 
-function getNextDisplay(calculatorState, currentInput) {
+function calculateNextState(calculatorState, currentInput) {
     let newCalculatorState = {};
     let display = null;
 
@@ -50,7 +46,7 @@ function getNextDisplay(calculatorState, currentInput) {
 
         //check if the input is operation
         else if (isOperator(currentInput)) {
-            newCalculatorState = {lastNumber: lastNumber, currNumber: currNumber, operator: currentInput};
+            newCalculatorState = {lastNumber: currNumber, currNumber: 0, operator: currentInput};
             display = currNumber;
         }
 
@@ -77,11 +73,11 @@ function calculate(calculatorState) {
         case '+':
             return lastNumber + currNumber;
         case '-':
-            return lastNumber + currNumber;
+            return lastNumber - currNumber;
         case '*':
-            return lastNumber + currNumber;
+            return lastNumber * currNumber;
         case '/':
-            return lastNumber + currNumber;
+            return lastNumber / currNumber;
         case '^':
             return Math.pow(lastNumber, currNumber);
         default:
@@ -89,4 +85,4 @@ function calculate(calculatorState) {
     }
 }
 
-module.exports.calculateNextState = calculateNext;
+module.exports = calculateNextState;

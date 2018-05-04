@@ -1,4 +1,4 @@
-const calculate = require('./src/calculateNextState');
+const calculateNextState = require('./src/calculateNextState');
 const express = require('express');
 const path = require('path');
 const http = require('http');
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // Set our api routes - for MVC
 app.post('/calculate', (req, res) => {
-    res.json(calculate.calculateNextState(req.body.calculatorState, req.body.input));
+    res.json(calculateNextState(req.body.calculatorState, req.body.input));
 });
 
 // Catch all other routes and return the index file
