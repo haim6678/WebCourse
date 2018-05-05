@@ -21,7 +21,7 @@ function calculateNextState(calculatorState, currentInput) {
             newCalculatorState = {lastNumber: 0, currNumber: currentInput, operator: null};
             display = currentInput;
         } else if (isOperator(currentInput)) {
-            newCalculatorState = {lastNumber: 0, currNumber: 0, operator: currentInput};
+            newCalculatorState = {lastNumber: 0, currNumber: 0, operator: null};
             display = '';
         } else if (isEquals(currentInput)) {
             newCalculatorState = {lastNumber: 0, currNumber: 0, operator: null};
@@ -41,18 +41,18 @@ function calculateNextState(calculatorState, currentInput) {
                 currNumber: isEquals(operator) ? currentInput : parseInt(currNumber) * 10 + parseInt(currentInput),
                 operator: operator
             };
-            display = isEquals(operator) ? currentInput : parseInt(currNumber) * 10 + parseInt(currentInput);
+            display = isEquals(operator) ? parseInt(currentInput) : parseInt(currNumber) * 10 + parseInt(currentInput);
         }
 
         //check if the input is operation
         else if (isOperator(currentInput)) {
-            let res = operator ? isEquals(operator) ? lastNumber : calculate(calculatorState) : currNumber;
+            let res = operator ? isEquals(operator) ? lastNumber : calculate(calculatorState) : parseInt(currNumber);
             newCalculatorState = {lastNumber: res, currNumber: 0, operator: currentInput};
-            display = currNumber;
+            display = res;
         }
 
         else if (isEquals(currentInput)) {
-            const result = operator ? calculate(calculatorState) : parseInt(currNumber);
+            const result = operator ? isEquals(operator) ? parseInt(currNumber) : calculate(calculatorState) : parseInt(currNumber);
             newCalculatorState = {lastNumber: result, currNumber: 0, operator: currentInput};
             display = result;
         }
