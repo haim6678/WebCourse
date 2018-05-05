@@ -46,12 +46,13 @@ function calculateNextState(calculatorState, currentInput) {
 
         //check if the input is operation
         else if (isOperator(currentInput)) {
-            newCalculatorState = {lastNumber: currNumber, currNumber: 0, operator: currentInput};
+            let res = operator ? isEquals(operator) ? lastNumber : calculate(calculatorState) : currNumber;
+            newCalculatorState = {lastNumber: res, currNumber: 0, operator: currentInput};
             display = currNumber;
         }
 
         else if (isEquals(currentInput)) {
-            const result = calculate(calculatorState);
+            const result = operator ? calculate(calculatorState) : parseInt(currNumber);
             newCalculatorState = {lastNumber: result, currNumber: 0, operator: currentInput};
             display = result;
         }
