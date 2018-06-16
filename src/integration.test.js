@@ -10,12 +10,12 @@ function sendInputs(inputs) {
     let s = null, res = null;
 
     inputs.forEach(function (input) {
-        res = request('POST', 'http://localhost:3000/calculate', {
+        res = request('POST', 'http://localhost:3001/calculate', {
           json: {calculatorState: s,
                  input: input}
         });
         res = JSON.parse(res.getBody('utf8'));
-        s = res.calculatorState;
+        s = {calculatorState: res.calculatorState};
     });
 
     return res.display;

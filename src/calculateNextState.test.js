@@ -5,7 +5,7 @@ function sendInputs(inputs) {
 
     inputs.forEach(function (input) {
         res = calculateNextState(s, input);
-        s = res.calculatorState;
+        s = {calculatorState: res.calculatorState};
     });
 
     return res.display;
@@ -14,7 +14,6 @@ function sendInputs(inputs) {
 test('1 + 2 = 3', () => {
     expect(sendInputs(['1', '+', '2', '='])).toBe(3);
 });
-
 
 test('14 + 26 = 40', () => {
     expect(sendInputs(['1', '4', '+', '2', '6', '='])).toBe(40);
