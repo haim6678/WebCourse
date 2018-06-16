@@ -1,0 +1,15 @@
+sudo docker login -u=haimru --password=password
+
+sudo docker system prune -a
+
+sudo docker build . -t webd
+
+sudo docker images
+
+sudo docker tag e45e2716d05f haimru/haimr:webdocker
+ 
+sudo docker push haimru/haimr:webdocker
+
+sudo docker run --rm -p 3000:3000 haimru/haimr:webdocker  OR sudo docker-compose up
+
+
