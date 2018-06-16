@@ -13,9 +13,9 @@ function isNumber(str) {
 function calculateNextState(calculatorState, currentInput) {
     let newCalculatorState = {};
     let display = null;
-
+	console.log('hey calc');
     //if it's the first input to the program
-    if (calculatorState === null) {
+    if (calculatorState === null || calculatorState === undefined) {
         // If the first input is a number
         if (isNumber(currentInput)) {
             newCalculatorState = {lastNumber: 0, currNumber: currentInput, operator: null};
@@ -31,9 +31,9 @@ function calculateNextState(calculatorState, currentInput) {
 
     //check if the input is a number
     else {
-        const lastNumber = calculatorState.lastNumber;
-        const currNumber = calculatorState.currNumber;
-        const operator = calculatorState.operator;
+        const lastNumber = calculatorState.calculatorState.lastNumber;
+        const currNumber = calculatorState.calculatorState.currNumber;
+        const operator = calculatorState.calculatorState.operator;
 
         if (isNumber(currentInput)) {
             newCalculatorState = {
@@ -66,9 +66,9 @@ function calculateNextState(calculatorState, currentInput) {
 }
 
 function calculate(calculatorState) {
-    const lastNumber = parseInt(calculatorState.lastNumber);
-    const currNumber = parseInt(calculatorState.currNumber);
-    const operator = calculatorState.operator;
+    const lastNumber = parseInt(calculatorState.calculatorState.lastNumber);
+    const currNumber = parseInt(calculatorState.calculatorState.currNumber);
+    const operator = calculatorState.calculatorState.operator;
 
     switch (operator) {
         case '+':
