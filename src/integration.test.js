@@ -5,23 +5,49 @@
    Thus we create an integtation tests.
 */
 var request = require('sync-request');
-
+var uri = "http://localhost:3000";
 function sendInputs(inputs) {
     let s = null, res = null;
 
-    inputs.forEach(function (input) {
-        res = request('POST', 'http://localhost:3001/calculate', {
-          json: {calculatorState: s,
-                 input: input}
-        });
-        res = JSON.parse(res.getBody('utf8'));
-        s = {calculatorState: res.calculatorState};
-    });
+    for (let i = 0; i < inputs.length; ++i) {
+      res = request('POST', uri + '/calculate', {
+        json: {calculatorState: s,
+               input: inputs[i]}
+      });
+      res = JSON.parse(res.getBody('utf8'));
+      s = {calculatorState: res.calculatorState};
+      if (res.display == "error")
+        throw new Error("invalid char");
+    }
 
     return res.display;
 }
 
+function connectionCheck() {
+  let res = request('GET', uri + '/connectionCheck/test');
+  res = res.getBody('utf8');
+
+  if (res == "test")
+    return true;
+
+  return false;
+}
+
 // tests
+test('connection test', () => {
+    expect(connectionCheck()).toBe(true);
+});
+
+test('a + 2 = error', () => {
+    // for jest to catch the error rather than exit on exception
+    // need to wrap the code in a function
+    expect(() => sendInputs(['a', '+', '2'])).toThrow();
+});
+
+test('2 + ! = error', () => {
+    expect(() => sendInputs(['2', '+', '!'])).toThrow();
+});
+
 test('1 + 2 = 3', () => {
     expect(sendInputs(['1', '+', '2', '='])).toBe(3);
 });
