@@ -4,6 +4,7 @@
    and routing through index.js.
    Thus we create an integtation tests.
 */
+
 var request = require('sync-request');
 var uri = "http://localhost:3000";
 function sendInputs(inputs) {
