@@ -1,7 +1,10 @@
 # Web Development Exercise
 Made by:
+
 **Dor Sharon 204239594**
+
 **Or Zipori 302933833**
+
 **Haim Rubinstein 203405386**
 
 **Note**: our docker image is already up on the docker hub, so if you don't want to run our tests, you can simply download our docker-compose.yaml file and run `docker-compose up`
