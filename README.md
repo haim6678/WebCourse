@@ -1,11 +1,11 @@
 # Web Development Exercise
 Made by:
 
-**Dor Sharon 204239594**
+**Dor Sharon 204239594 dor442@gmail.com**
 
-**Or Zipori 302933833**
+**Or Zipori 302933833 or_zipori@walla.co.il**
 
-**Haim Rubinstein 203405386**
+**Haim Rubinstein 203405386 haim6678@gmail.com**
 
 **Note**: our docker image is already up on the docker hub, so if you don't want to run our tests, you can simply download our docker-compose.yaml file and run `docker-compose up`
 
